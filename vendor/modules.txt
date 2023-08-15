@@ -118,6 +118,10 @@ github.com/googleapis/gax-go/v2/internal
 # github.com/kennygrant/sanitize v1.2.4
 ## explicit
 github.com/kennygrant/sanitize
+# github.com/meowalien/RabbitGather-proto v0.0.0-00010101000000-000000000000 => ../RabbitGather-proto
+## explicit; go 1.21.0
+github.com/meowalien/RabbitGather-proto/go/interest
+github.com/meowalien/RabbitGather-proto/go/share
 # github.com/meowalien/go-meowalien-lib v1.13.1-0.20230811091809-a2be4c42bebf => ../go-meowalien-lib
 ## explicit; go 1.18
 github.com/meowalien/go-meowalien-lib/bitmask
@@ -125,6 +129,7 @@ github.com/meowalien/go-meowalien-lib/errs
 github.com/meowalien/go-meowalien-lib/graceful_shutdown
 github.com/meowalien/go-meowalien-lib/grpcs
 github.com/meowalien/go-meowalien-lib/runtime
+github.com/meowalien/go-meowalien-lib/schedule
 # github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca
 ## explicit
 github.com/saintfish/chardet
@@ -365,4 +370,5 @@ google.golang.org/protobuf/types/known/fieldmaskpb
 google.golang.org/protobuf/types/known/structpb
 google.golang.org/protobuf/types/known/timestamppb
 google.golang.org/protobuf/types/known/wrapperspb
+# github.com/meowalien/RabbitGather-proto => ../RabbitGather-proto
 # github.com/meowalien/go-meowalien-lib => ../go-meowalien-lib

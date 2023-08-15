@@ -9,7 +9,7 @@ import (
 )
 
 func TestSimpleCrawler(t *testing.T) {
-	cw := SimpleCrawlerSetting{
+	cw := SimpleCrawlerConstructor{
 		Url:           "http://go-colly.org/",
 		QuerySelector: "body > div.content > div.ui.inverted.vertical.masthead.center.aligned.segment > div > h2",
 	}.New()

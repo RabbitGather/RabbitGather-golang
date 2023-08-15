@@ -2,11 +2,12 @@ package graceful_shutdown
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/meowalien/go-meowalien-lib/errs"
 )
 
 type GracefulShutdown interface {
@@ -33,7 +34,7 @@ func NewGracefulShutdown() GracefulShutdown {
 		afterAllStop: make(chan struct{}),
 	}
 	signal.Notify(g.c, syscall.SIGINT, syscall.SIGTERM)
-	g.listen()
+	go g.listen()
 	return g
 }
 
@@ -46,13 +47,12 @@ type gracefulShutdown struct {
 
 func (g *gracefulShutdown) listen() {
 	defer close(g.afterAllStop)
-	<-g.c
+	theSignal := <-g.c
+	log.Println("GracefulShutdown: received signal: ", theSignal)
 	signal.Stop(g.c)
 	err := g.runStopStack()
 	if err != nil {
 		log.Fatalln("GracefulShutdown: finished with error: ", err)
-	} else {
-		log.Println("GracefulShutdown: finished")
 	}
 }
 
@@ -79,11 +79,8 @@ func (g *gracefulShutdown) runStopStack() error {
 				}
 			}()
 			err1 := g.stopStack[i].f(ctx)
-			if err == nil {
-				err = err1
-			} else {
-				err = fmt.Errorf("%w\n%s", err, err1)
-			}
+			err = errs.New(err, err1)
+
 		}()
 	}
 	return err

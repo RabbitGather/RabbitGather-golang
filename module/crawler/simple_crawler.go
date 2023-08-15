@@ -6,20 +6,17 @@ import (
 	"github.com/gocolly/colly/v2"
 )
 
-// SimpleCrawler is the crawler that crawl a particular part of a website.
-const SimpleCrawler CrawlerType = iota
-
-type SimpleCrawlerSetting struct {
+type SimpleCrawlerConstructor struct {
 	Url           string
 	QuerySelector string
 }
 
-func (s SimpleCrawlerSetting) New() Crawler {
-	return &simpleCrawler{SimpleCrawlerSetting: s, c: colly.NewCollector(colly.Async(false))}
+func (s SimpleCrawlerConstructor) New() Crawler {
+	return &simpleCrawler{SimpleCrawlerConstructor: s, c: colly.NewCollector(colly.Async(false))}
 }
 
 type simpleCrawler struct {
-	SimpleCrawlerSetting
+	SimpleCrawlerConstructor
 	c *colly.Collector
 }
 

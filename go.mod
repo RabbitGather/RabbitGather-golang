@@ -6,6 +6,7 @@ require (
 	cloud.google.com/go/firestore v1.12.0
 	cloud.google.com/go/storage v1.29.0
 	github.com/gocolly/colly/v2 v2.1.0
+	github.com/meowalien/RabbitGather-proto v0.0.0-00010101000000-000000000000
 	github.com/meowalien/go-meowalien-lib v1.13.1-0.20230811091809-a2be4c42bebf
 	google.golang.org/api v0.126.0
 	google.golang.org/grpc v1.57.0
@@ -49,4 +50,7 @@ require (
 	google.golang.org/protobuf v1.31.0 // indirect
 )
 
-replace github.com/meowalien/go-meowalien-lib => ../go-meowalien-lib
+replace (
+	github.com/meowalien/RabbitGather-proto => ../RabbitGather-proto
+	github.com/meowalien/go-meowalien-lib => ../go-meowalien-lib
+)

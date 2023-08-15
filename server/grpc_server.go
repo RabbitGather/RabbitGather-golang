@@ -2,35 +2,41 @@ package server
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/meowalien/go-meowalien-lib/errs"
 	"github.com/meowalien/go-meowalien-lib/grpcs"
 	"google.golang.org/grpc"
 )
 
 type GRPCServer struct {
-	Port       int
-	servers    *Servers
-	grpcServer *grpc.Server
+	GRPCServer                 *grpc.Server
+	GRPCListenAndServeLauncher grpcs.GRPCListenAndServeLauncher
+	allServiceMount            []GRPCService
 }
 
-func (s *GRPCServer) AddService(grpcService GRPCService) {
-	grpcService.MountTo(s.grpcServer)
+func (s *GRPCServer) Name() string {
+	return "GRPCServer"
 }
 
 func (s *GRPCServer) GracefulStop(ctx context.Context) (err error) {
-	s.grpcServer.GracefulStop()
+	s.GRPCServer.GracefulStop()
 	return
 }
 
 func (s *GRPCServer) ListenAndServe() (err error) {
-	if s.Port == 0 {
-		return
+	for _, grpcService := range s.allServiceMount {
+		grpcService.MountRPCServer(s.GRPCServer)
 	}
-	err = grpcs.ListenAndServe(s.grpcServer, fmt.Sprintf(":%d", s.Port))
+
+	err = s.GRPCListenAndServeLauncher.ListenAndServe(s.GRPCServer)
 	if err != nil {
-		fmt.Println("grpcServer stopped with error: ", err)
+		err = errs.New(err)
 		return err
 	}
 	return
+}
+
+// AddService store GRPCService , and will call MountRPCServer() when ListenAndServe()
+func (s *GRPCServer) AddService(cs GRPCService) {
+	s.allServiceMount = append(s.allServiceMount, cs)
 }

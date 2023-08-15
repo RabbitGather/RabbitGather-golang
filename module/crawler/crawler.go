@@ -6,10 +6,31 @@ import (
 	"encoding/gob"
 	"errors"
 
+	"github.com/meowalien/RabbitGather-proto/go/interest"
+	"github.com/meowalien/RabbitGather-proto/go/share"
 	"github.com/meowalien/go-meowalien-lib/errs"
 )
 
-type CrawlerType uint32
+type Constructor struct {
+	Type              interest.CrawlerType
+	GobEncodingStruct []byte
+}
+
+// NewCrawler creates a new crawler from the given type and the gob encoded struct.
+func NewCrawler(t interest.CrawlerType, msg *share.EncodedMessage) (cw Crawler) {
+	switch t {
+	case interest.CrawlerType_SimpleCrawler:
+		var setting SimpleCrawlerConstructor
+		err := decodeInto(msg, &setting)
+		if err != nil {
+			panic(err)
+		}
+		return setting.New()
+	default:
+		panic(ErrUnknownCrawlerType)
+		return
+	}
+}
 
 // Crawler is the interface that abstracts the crawler.
 type Crawler interface {
@@ -20,29 +41,19 @@ type Crawler interface {
 }
 
 var ErrUnknownCrawlerType = errors.New("unknown crawler type")
+var ErrUnknownEncoding = errors.New("unknown encoding")
 
-// NewCrawler creates a new crawler from the given type and the gob encoded struct.
-func NewCrawler(t CrawlerType, gobEncodingStruct []byte) (cw Crawler, err error) {
-	switch t {
-	case SimpleCrawler:
-		var setting SimpleCrawlerSetting
-		err = decodeInto(gobEncodingStruct, &setting)
+func decodeInto[T any](msg *share.EncodedMessage, s *T) (err error) {
+	switch msg.Encoding {
+	case share.Encoding_GOB:
+		err = gob.NewDecoder(bytes.NewReader(msg.Data)).Decode(s)
 		if err != nil {
 			err = errs.New(err)
 			return
 		}
-		return setting.New(), nil
 	default:
-		err = ErrUnknownCrawlerType
-		return
+		err = errs.New(ErrUnknownEncoding)
 	}
-}
 
-func decodeInto[T any](encodingStruct []byte, s *T) (err error) {
-	err = gob.NewDecoder(bytes.NewReader(encodingStruct)).Decode(s)
-	if err != nil {
-		err = errs.New(err)
-		return
-	}
 	return
 }

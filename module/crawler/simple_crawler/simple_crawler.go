@@ -1,9 +1,11 @@
-package crawler
+package simple_crawler
 
 import (
 	"context"
 
 	"github.com/gocolly/colly/v2"
+
+	"github.com/meowalien/RabbitGather-interest-crawler.git/module/crawler"
 )
 
 type SimpleCrawlerConstructor struct {
@@ -11,7 +13,7 @@ type SimpleCrawlerConstructor struct {
 	QuerySelector string
 }
 
-func (s SimpleCrawlerConstructor) New() Crawler {
+func (s SimpleCrawlerConstructor) New() crawler.Crawler {
 	return &simpleCrawler{SimpleCrawlerConstructor: s, c: colly.NewCollector(colly.Async(false))}
 }
 

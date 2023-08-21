@@ -1,4 +1,4 @@
-package crawler
+package simple_crawler
 
 import (
 	"context"

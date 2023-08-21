@@ -1,5 +1,5 @@
 // service is the interface that connects the business logic and dependencies.
-package server
+package manager
 
 import (
 	"context"
@@ -10,29 +10,31 @@ import (
 	"github.com/meowalien/go-meowalien-lib/errs"
 	"github.com/meowalien/go-meowalien-lib/graceful_shutdown"
 	"github.com/meowalien/go-meowalien-lib/schedule"
+
+	"github.com/meowalien/RabbitGather-interest-crawler.git/fremwork/server"
 )
 
 type Manager interface {
-	Server
+	server.Launcher
 }
 
-type ManagerConstructor struct {
+type Constructor struct {
 	Retryer          schedule.Retryer
 	GracefulShutdown graceful_shutdown.GracefulShutdown
-	Servers          []Server
+	Servers          []server.Launcher
 }
 
-func (m ManagerConstructor) New() Manager {
+func (m Constructor) New() Manager {
 	return &manager{
-		ManagerConstructor: m,
-		stopFunctions:      make(map[string]func(ctx context.Context) error),
-		cond:               sync.NewCond(&sync.Mutex{}),
+		Constructor:   m,
+		stopFunctions: make(map[string]func(ctx context.Context) error),
+		cond:          sync.NewCond(&sync.Mutex{}),
 	}
 }
 
 // manager is the manager of all Manager, it will control all server's lifecycle.
 type manager struct {
-	ManagerConstructor
+	Constructor
 
 	isRunning atomic.Bool
 
@@ -127,7 +129,7 @@ func (g *manager) stopAllServers(ctx context.Context) {
 			g.addError(err1)
 		}
 
-		//err = errs.New(err, err1)
+		//err = errs.Connect(err, err1)
 	}
 	return
 }
@@ -145,21 +147,21 @@ func (g *manager) addStopFunc(name string, stopFunc func(ctx context.Context) (e
 	g.GracefulShutdown.Add(name, stopFuncWithOnce)
 }
 
-func (g *manager) startServer(server Server) {
+func (g *manager) startServer(svr server.Launcher) {
 	g.addGoRoutine(1)
-	go func(server Server) {
+	go func(svr server.Launcher) {
 		defer g.doneGoRoutine()
 
-		g.addStopFunc(server.Name(), func(ctx context.Context) (err error) {
-			return server.GracefulStop(ctx)
+		g.addStopFunc(svr.Name(), func(ctx context.Context) (err error) {
+			return svr.GracefulStop(ctx)
 		})
 		err := g.Retryer.Try(context.Background(), func(ctx context.Context) error {
-			return server.ListenAndServe()
+			return svr.ListenAndServe()
 		})
 		if err != nil {
 			g.addError(err)
 		}
-	}(server)
+	}(svr)
 }
 
 func (g *manager) addError(err error) {

@@ -2,8 +2,8 @@ package server
 
 import "context"
 
-// Server is the interface that defines the methods of a server lifecycle.
-type Server interface {
+// Launcher is the interface that defines the methods of a server lifecycle.
+type Launcher interface {
 	// Name returns the name of the server.
 	Name() string
 	// GracefulStop stops the server gracefully.

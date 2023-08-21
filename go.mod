@@ -8,6 +8,7 @@ require (
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/meowalien/RabbitGather-proto v0.0.0-00010101000000-000000000000
 	github.com/meowalien/go-meowalien-lib v1.13.1-0.20230811091809-a2be4c42bebf
+	github.com/rabbitmq/amqp091-go v1.8.1
 	google.golang.org/api v0.126.0
 	google.golang.org/grpc v1.57.0
 )
@@ -33,6 +34,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.11.0 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
+	github.com/stretchr/testify v1.8.2 // indirect
 	github.com/temoto/robotstxt v1.1.1 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/crypto v0.9.0 // indirect

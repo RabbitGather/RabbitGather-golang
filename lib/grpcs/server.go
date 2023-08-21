@@ -48,13 +48,12 @@ type GRPCListenAndServeLauncher struct {
 }
 
 func (g *GRPCListenAndServeLauncher) Name() string {
-	//TODO implement me
-	panic("implement me")
+	return "GRPCServer"
 }
 
 func (g *GRPCListenAndServeLauncher) GracefulStop(ctx context.Context) (err error) {
-	//TODO implement me
-	panic("implement me")
+	g.GRPCServer.GracefulStop()
+	return
 }
 
 func (g *GRPCListenAndServeLauncher) ListenAndServe() (err error) {

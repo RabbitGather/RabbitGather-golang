@@ -130,9 +130,14 @@ github.com/meowalien/go-meowalien-lib/graceful_shutdown
 github.com/meowalien/go-meowalien-lib/grpcs
 github.com/meowalien/go-meowalien-lib/runtime
 github.com/meowalien/go-meowalien-lib/schedule
+# github.com/rabbitmq/amqp091-go v1.8.1
+## explicit; go 1.16
+github.com/rabbitmq/amqp091-go
 # github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca
 ## explicit
 github.com/saintfish/chardet
+# github.com/stretchr/testify v1.8.2
+## explicit; go 1.13
 # github.com/temoto/robotstxt v1.1.1
 ## explicit; go 1.11
 github.com/temoto/robotstxt

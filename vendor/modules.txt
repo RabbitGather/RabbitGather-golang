@@ -127,7 +127,6 @@ github.com/meowalien/RabbitGather-proto/go/share
 github.com/meowalien/go-meowalien-lib/bitmask
 github.com/meowalien/go-meowalien-lib/errs
 github.com/meowalien/go-meowalien-lib/graceful_shutdown
-github.com/meowalien/go-meowalien-lib/grpcs
 github.com/meowalien/go-meowalien-lib/runtime
 github.com/meowalien/go-meowalien-lib/schedule
 # github.com/rabbitmq/amqp091-go v1.8.1

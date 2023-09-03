@@ -1,0 +1,2 @@
+grpc_server:
+    port: 50051

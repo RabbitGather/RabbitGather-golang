@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option go_package = "/webinterest";
+
+
+enum CrawlerType {
+  SimpleCrawler = 0;
+}
+
+service InterestCrawler {
+  rpc Crawl (CrawlRequest) returns(CrawlResponse);
+}
+
+message CrawlResponse {
+  repeated bytes Data =1;
+}
+
+message CrawlRequest {
+  CrawlerType Type = 1;
+  bytes Message = 2;
+}
+
